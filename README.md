@@ -35,7 +35,7 @@ Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
 公开访问地址通常是：
 
 ```text
-https://turtleneck1109-design.github.io/GPT-Typora-format-conversion-tool/
+https://turtleneck1109-design.github.io/GPT-to-Typora-Markdown-Cleaner/
 ```
 
 如果页面暂时打不开，可以到仓库的 `Actions` 页面查看 `Deploy static site to GitHub Pages` 是否已经运行完成。
