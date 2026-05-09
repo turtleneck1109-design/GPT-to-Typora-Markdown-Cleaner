@@ -2,6 +2,44 @@
 
 ✍️ 一个用于清理 GPT 复制文本的小工具，让 Markdown 在 Typora 里更稳定地渲染标题、列表、代码块和 LaTeX 公式。
 
+## 🌐 网页版
+
+项目根目录已经包含一个纯前端网页：
+
+```text
+index.html
+styles.css
+app.js
+```
+
+直接在浏览器打开 `index.html` 就能使用。它支持拖拽文件、选择多个文件、粘贴文本、预览转换结果、复制结果和下载 `_typora` 文件。
+
+这个网页在浏览器本地完成转换，不会把 Markdown 内容上传到服务器。把这三个文件部署到 GitHub Pages、Netlify、Vercel 或任意静态网站托管服务，就可以做成线上工具。
+
+### 🚢 发布到 GitHub Pages
+
+本仓库已经包含 GitHub Pages 自动部署配置：
+
+```text
+.github/workflows/pages.yml
+```
+
+把代码推送到 GitHub 后，在仓库页面进入：
+
+```text
+Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
+```
+
+选择 GitHub Actions 作为部署来源。之后每次推送到 `main` 或 `master` 分支，网站都会自动发布。
+
+公开访问地址通常是：
+
+```text
+https://turtleneck1109-design.github.io/GPT-Typora-format-conversion-tool/
+```
+
+如果页面暂时打不开，可以到仓库的 `Actions` 页面查看 `Deploy static site to GitHub Pages` 是否已经运行完成。
+
 ## 🧭 思维导图
 
 ```mermaid

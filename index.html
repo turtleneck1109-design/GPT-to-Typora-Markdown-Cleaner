@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT to Typora Markdown Cleaner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="workspace" aria-labelledby="app-title">
+      <div class="intro">
+        <div class="brand-row">
+          <div class="mark" aria-hidden="true">T</div>
+          <div>
+            <p class="eyebrow">本地浏览器转换 · 不上传文件</p>
+            <h1 id="app-title">GPT to Typora Markdown Cleaner</h1>
+          </div>
+        </div>
+        <p class="intro-copy">拖入 GPT 复制出来的 Markdown，自动清理代码围栏、转义符和常见 LaTeX 公式，让内容在 Typora 里更稳定地渲染。</p>
+      </div>
+
+      <div class="tool-grid">
+        <section class="panel input-panel" aria-labelledby="input-title">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">输入</p>
+              <h2 id="input-title">文件或文本</h2>
+            </div>
+            <label class="icon-button file-button" title="选择文件">
+              <span aria-hidden="true">＋</span>
+              <span class="sr-only">选择文件</span>
+              <input id="file-input" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" multiple>
+            </label>
+          </div>
+
+          <div id="drop-zone" class="drop-zone" tabindex="0">
+            <div class="drop-icon" aria-hidden="true">⇣</div>
+            <p>拖拽 `.md`、`.markdown`、`.txt` 到这里</p>
+            <span>或点击右上角按钮选择多个文件</span>
+          </div>
+
+          <label class="text-label" for="source-text">也可以直接粘贴文本</label>
+          <textarea id="source-text" spellcheck="false" placeholder="把从 GPT 复制的 Markdown 粘贴到这里..."></textarea>
+
+          <div class="actions">
+            <button id="convert-text" type="button">转换文本</button>
+            <button id="clear-all" class="secondary" type="button">清空</button>
+          </div>
+        </section>
+
+        <section class="panel output-panel" aria-labelledby="output-title">
+          <div class="panel-head">
+            <div>
+              <p class="section-kicker">输出</p>
+              <h2 id="output-title">转换结果</h2>
+            </div>
+            <button id="download-current" class="icon-button" type="button" title="下载当前结果" disabled>
+              <span aria-hidden="true">↓</span>
+              <span class="sr-only">下载当前结果</span>
+            </button>
+          </div>
+
+          <div id="result-list" class="result-list" aria-live="polite">
+            <div class="empty-state">
+              <div class="empty-icon" aria-hidden="true">⌁</div>
+              <p>转换后的文件会出现在这里</p>
+            </div>
+          </div>
+
+          <textarea id="output-text" spellcheck="false" readonly placeholder="转换结果预览"></textarea>
+
+          <div class="actions">
+            <button id="copy-current" type="button" disabled>复制结果</button>
+            <button id="download-all" class="secondary" type="button" disabled>下载全部</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="support-panel" aria-label="支持范围">
+      <div class="stat">
+        <strong id="file-count">0</strong>
+        <span>已转换文件</span>
+      </div>
+      <div class="support-block">
+        <h2>可处理内容</h2>
+        <div class="chip-row">
+          <span>Markdown 围栏</span>
+          <span>多余转义</span>
+          <span>行内公式</span>
+          <span>整行公式</span>
+          <span>逻辑符号</span>
+          <span>集合符号</span>
+          <span>Unicode 数学符号</span>
+        </div>
+      </div>
+      <div class="pipeline" aria-label="转换流程">
+        <div>读取</div>
+        <div>清理</div>
+        <div>规范公式</div>
+        <div>下载</div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
