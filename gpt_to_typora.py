@@ -30,17 +30,56 @@ MOJIBAKE_MARKERS = (
     "�",
 )
 
+COMMON_LATEX_COMMANDS = (
+    # Greek letters and variants.
+    "alpha", "beta", "gamma", "delta", "epsilon", "varepsilon", "zeta", "eta",
+    "theta", "vartheta", "iota", "kappa", "lambda", "mu", "nu", "xi", "pi",
+    "varpi", "rho", "varrho", "sigma", "varsigma", "tau", "upsilon", "phi",
+    "varphi", "chi", "psi", "omega", "Gamma", "Delta", "Theta", "Lambda",
+    "Xi", "Pi", "Sigma", "Upsilon", "Phi", "Psi", "Omega",
+    # Functions, calculus, limits, and common operators.
+    "frac", "dfrac", "tfrac", "binom", "sqrt", "sum", "prod", "coprod", "int", "iint",
+    "iiint", "oint", "lim", "limsup", "liminf", "sin", "cos", "tan", "cot",
+    "sec", "csc", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "ln",
+    "log", "lg", "exp", "max", "min", "sup", "inf", "det", "dim", "gcd",
+    "Pr", "partial", "nabla", "infty", "cdot", "times", "div", "pm", "mp",
+    "circ", "bullet", "ast", "star", "leq", "geq", "neq", "approx", "sim",
+    "simeq", "equiv", "propto", "parallel", "perp", "angle", "degree", "prime",
+    "ldots", "cdots", "vdots", "ddots",
+    # Sets, logic, arrows, and relations.
+    "in", "not", "notin", "ni", "subset", "supset", "subseteq", "supseteq", "subsetneq",
+    "supsetneq", "cup", "cap", "emptyset", "varnothing", "setminus", "forall",
+    "exists", "nexists", "land", "lor", "lnot", "neg", "wedge", "vee", "oplus",
+    "otimes", "to", "mapsto", "gets", "leftarrow", "rightarrow", "leftrightarrow",
+    "Leftarrow", "Rightarrow", "Leftrightarrow", "longleftarrow", "longrightarrow",
+    "longleftrightarrow", "Longleftarrow", "Longrightarrow", "Longleftrightarrow",
+    "implies", "iff", "therefore", "because", "mid",
+    # Delimiters, accents, spacing, matrices, and text helpers often seen in formulas.
+    "left", "right", "big", "Big", "bigg", "Bigg", "langle", "rangle", "lfloor",
+    "rfloor", "lceil", "rceil", "overline", "underline", "hat", "bar", "vec",
+    "dot", "ddot", "tilde", "mathbb", "mathbf", "mathrm", "mathit", "mathcal",
+    "mathfrak", "operatorname", "text", "quad", "qquad", "begin", "end",
+)
+
 LATEX_COMMAND = re.compile(
-    r"\\(?:frac|sum|int|sqrt|cos|sin|tan|cot|sec|csc|ln|log|exp|"
-    r"omega|varphi|phi|pi|alpha|beta|gamma|delta|Delta|theta|lambda|mu|nu|"
-    r"rho|sigma|tau|varepsilon|zeta|eta|xi|psi|Omega|"
-    r"land|lor|lnot|neg|wedge|vee|to|rightarrow|leftarrow|leftrightarrow|"
-    r"Rightarrow|Leftarrow|Leftrightarrow|implies|iff|forall|exists)\b"
+    r"\\(?:"
+    + "|".join(re.escape(command) for command in COMMON_LATEX_COMMANDS)
+    + r")\b"
+)
+
+UNICODE_MATH_SYMBOL = re.compile(
+    "["
+    "\u2200\u2203\u2204\u2208\u2209\u220b\u2282\u2283\u2286\u2287"
+    "\u222a\u2229\u2227\u2228\u00ac\u21d2\u21d0\u21d4\u2192\u2190\u2194"
+    "\u2264\u2265\u2260\u2248\u2261\u221e\u00b1\u2213\u00d7\u00f7\u00b7"
+    "\u221a\u2211\u220f\u222b\u2202\u2207"
+    "]"
 )
 
 LATEX_HINT = re.compile(
     LATEX_COMMAND.pattern
-    + r"|[=^_<>+\-*/]|\\left|\\right|\\dot|\\ddot"
+    + r"|[=^_<>+\-*/]|"
+    + UNICODE_MATH_SYMBOL.pattern
 )
 
 SIMPLE_MATH_TOKEN = re.compile(r"[A-Za-z](?:_\{?[A-Za-z0-9]+\}?|\^\{?[A-Za-z0-9]+\}?)*$")
@@ -121,7 +160,9 @@ def is_math_fragment(value: str) -> bool:
     value = value.strip()
     if not value or value.startswith(("http://", "https://", "www.")):
         return False
-    if any(char.isspace() for char in value) and not LATEX_COMMAND.search(value):
+    if any(char.isspace() for char in value) and not (
+        LATEX_COMMAND.search(value) or UNICODE_MATH_SYMBOL.search(value)
+    ):
         return False
     if LATEX_HINT.search(value):
         return True
