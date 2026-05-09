@@ -45,6 +45,14 @@ mindmap
 原文件_typora.md
 ```
 
+转换完成后，终端会询问：
+
+```text
+Open converted file(s) now? [O] Open  [C] Close:
+```
+
+按 `O` 会立即打开转换后的文件；按 `C` 会直接关闭终端。
+
 也可以一次拖多个文件，或者拖一个文件夹。拖文件夹时，脚本会处理文件夹第一层里的 `.md`、`.markdown`、`.txt` 文件。
 
 ## 🔧 它能解决什么问题
