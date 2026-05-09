@@ -33,7 +33,9 @@ MOJIBAKE_MARKERS = (
 LATEX_COMMAND = re.compile(
     r"\\(?:frac|sum|int|sqrt|cos|sin|tan|cot|sec|csc|ln|log|exp|"
     r"omega|varphi|phi|pi|alpha|beta|gamma|delta|Delta|theta|lambda|mu|nu|"
-    r"rho|sigma|tau|varepsilon|zeta|eta|xi|psi|Omega)\b"
+    r"rho|sigma|tau|varepsilon|zeta|eta|xi|psi|Omega|"
+    r"land|lor|lnot|neg|wedge|vee|to|rightarrow|leftarrow|leftrightarrow|"
+    r"Rightarrow|Leftarrow|Leftrightarrow|implies|iff|forall|exists)\b"
 )
 
 LATEX_HINT = re.compile(
