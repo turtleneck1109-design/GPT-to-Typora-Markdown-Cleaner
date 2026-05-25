@@ -67,6 +67,13 @@
   function normalizeMathDelimiters(text) {
     let fixed = text
       .replace(/\\\[([\s\S]*?)\\\]/g, (_, formula) => `\n$$\n${formula.trim()}\n$$\n`)
+      .replace(/^[ \t]*\[[ \t]*\r?\n([\s\S]*?)\r?\n[ \t]*\][ \t]*\r?$/gm, (block, formula) => {
+        const trimmed = formula.trim();
+        const repaired = trimmed
+          .replace(/(?<!\\)\$([^$\n]*?)(?<!\\)\$/g, "($1)")
+          .replace(/(?<!\\)\$/g, "");
+        return trimmed ? `\n$$\n${repaired}\n$$\n` : block;
+      })
       .replace(/\\\(([\s\S]*?)\\\)/g, (_, formula) => `$${formula.trim()}$`);
 
     const hadFinalNewline = fixed.endsWith("\n");
@@ -120,8 +127,15 @@
 
   function normalizeInlineParenthesizedMath(text) {
     const hadFinalNewline = text.endsWith("\n");
+    let inDisplayMath = false;
     const fixedLines = text.split(/\r?\n/).map((line) => {
-      if (line.includes("$$")) return line;
+      const displayDelimiters = line.match(/\$\$/g);
+      if (inDisplayMath || displayDelimiters) {
+        if (displayDelimiters && displayDelimiters.length % 2 === 1) {
+          inDisplayMath = !inDisplayMath;
+        }
+        return line;
+      }
 
       let result = "";
       let index = 0;

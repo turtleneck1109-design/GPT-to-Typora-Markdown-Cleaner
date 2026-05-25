@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Clean GPT-copied Markdown so Typora renders it more reliably.
+r"""Clean GPT-copied Markdown so Typora renders it more reliably.
 
 Typical fixes:
 - repair common mojibake caused by UTF-8/GBK copy or terminal display issues
 - unwrap a whole-document Markdown code fence
 - unescape Markdown symbols that GPT sometimes protects with backslashes
 - convert LaTeX delimiters \( \) and \[ \] to Typora-friendly $ / $$
+- convert standalone [ ... ] blocks copied without backslashes to display math
 - convert standalone parenthesized LaTeX-like lines, e.g. (x=A\cos t), to $$...$$
 """
 
@@ -134,6 +135,21 @@ def unescape_markdown(text: str) -> str:
 
 def normalize_math_delimiters(text: str) -> str:
     text = re.sub(r"\\\[(.*?)\\\]", lambda m: "\n$$\n" + m.group(1).strip() + "\n$$\n", text, flags=re.S)
+
+    def fix_bare_display_math(match: re.Match[str]) -> str:
+        formula = match.group(1).strip()
+        if not formula:
+            return match.group(0)
+        formula = re.sub(r"(?<!\\)\$([^$\n]*?)(?<!\\)\$", r"(\1)", formula)
+        formula = re.sub(r"(?<!\\)\$", "", formula)
+        return "\n$$\n" + formula + "\n$$\n"
+
+    text = re.sub(
+        r"^[ \t]*\[[ \t]*\r?\n(.*?)\r?\n[ \t]*\][ \t]*\r?$",
+        fix_bare_display_math,
+        text,
+        flags=re.S | re.M,
+    )
     text = re.sub(r"\\\((.*?)\\\)", lambda m: "$" + m.group(1).strip() + "$", text, flags=re.S)
 
     lines = text.splitlines()
@@ -189,8 +205,12 @@ def find_matching_paren(text: str, start: int) -> int:
 
 def normalize_inline_parenthesized_math(text: str) -> str:
     fixed_lines: list[str] = []
+    in_display_math = False
     for line in text.splitlines():
-        if "$$" in line:
+        display_delimiters = line.count("$$")
+        if in_display_math or display_delimiters:
+            if display_delimiters % 2:
+                in_display_math = not in_display_math
             fixed_lines.append(line)
             continue
 

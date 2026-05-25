@@ -98,6 +98,8 @@ Open converted file(s) now? [O] Open  [C] Close:
 - 🧱 整篇内容被包在 ` ```markdown ` 代码块里，Typora 把正文当代码显示。
 - 🪄 Markdown 符号被多余反斜杠转义，例如 `\#`、`\*`、`\[`。
 - 🧮 LaTeX 公式没有使用 Typora 更稳定的 `$...$` 或 `$$...$$` 包裹。
+- 🧮 GPT 复制出的显示公式只剩独立成行的 `[` 和 `]`，例如截图中的方程组。
+- 🧩 旧转换结果中显示公式的括号被错误改成 `$...$`，重新转换可一并还原。
 - 📐 行内公式没有渲染，例如 `(\nu)`、`(\beta>\omega_0)`、`(A \land B)`。
 - 📏 整行公式没有渲染，例如 `(x=A\cos(\omega t+\varphi))`。
 - 🧹 文件编码不统一导致读取异常或轻度乱码。
@@ -116,6 +118,10 @@ Open converted file(s) now? [O] Open  [C] Close:
 命题 (A \Rightarrow B) 成立
 
 集合 (x ∈ A)
+
+[
+J_0=\bar Q_1
+]
 ```
 
 转换后：
@@ -130,6 +136,10 @@ $$x=A\cos(\omega t+\varphi)$$
 命题 $A \Rightarrow B$ 成立
 
 集合 $x ∈ A$
+
+$$
+J_0=\bar Q_1
+$$
 ```
 
 ## 🧠 常用 LaTeX 支持范围
